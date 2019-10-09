@@ -1,4 +1,8 @@
 import random
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+letters = 'abcdefghijklmnopqrstuvwxyz'
+# I wrote this without even realizing there are python conventions (snake_case)
+# Will adjust in future projects
 
 
 def game():
@@ -7,73 +11,150 @@ def game():
 
     # Could have the function setDifficulty which will loop until they give a proper difficulty mode
     difficulty = setDifficulty()
-
+    wordToGuess = getWord(difficulty)
+    lettersGuessed = []
+    life = 8
     if difficulty == 'easy':  # put into a function?
         # Grab from the text file at any random line, as well as checking the length of that word
         # This will only select words that are 4-6 characters long
-        wordToGuess = getWord(difficulty)
-        life = 8
-        lettersGuessed = []
-
-        print('Alright friend!')
+        print('Alright friend!')  # Pretend it is a bunny
         while not gameOver:
-            print(lettersGuessed)
-            display = []
-            for letter in wordToGuess:
-                if letter not in lettersGuessed:
-                    display += '_'
-                else:
-                    display += letter
+            print('These are your guessed letters: ', ' '.join(lettersGuessed))
+            print('This is your life total: ', life)
+
+            # Build your board
+            display = build_display(lettersGuessed, wordToGuess)
             print(' '.join(display))
 
-            guessedLetter = checker()
-
+            # Take the players guess and check it
+            guessedLetter = checker(lettersGuessed)
             lettersGuessed += guessedLetter
-            if (''.join(display) == wordToGuess):
+
+            # Check if they win/lose
+            display = build_display(lettersGuessed, wordToGuess)
+            if ''.join(display) == wordToGuess:
                 print('You win! I hope it feels good!')
                 gameOver = True
+            elif guessedLetter == True:
+                print('Well, hope to see you again!')
+                gameOver = True
             elif guessedLetter in wordToGuess:
-                pass  # Don't kill somebody doing a good job
+                pass  # Don't kill somebody doing a good
             elif life == 0:
                 print('Haha, if this were hang man, your dude would be hung! GAME OVER!')
                 gameOver = True
             else:  # If you don't guess a letter correctly
-                cheerTalk()
                 life -= 1
-            print('This is your life total: ', life)
+            print('≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈')
+            # Loop
 
     elif difficulty == 'medium':
         # Grab from the text file at any random line, as well as checking the length of that word
         # This will only select words that are 6-8 characters long
-        wordToGuess = getWord(difficulty)
-        print('Alright sport!')
+        print('Alright sport!')  # Pretend this is a coach
         while not gameOver:
+            print('These are your guessed letters: ', ' '.join(lettersGuessed))
+            print('This is your life total: ', life)
 
-            pass
+            # Build your board
+            display = build_display(lettersGuessed, wordToGuess)
+            print(' '.join(display))
+
+            # Take the players guess and check it
+            guessedLetter = checker(lettersGuessed)
+            lettersGuessed += guessedLetter
+
+            # Check if they win/lose
+            display = build_display(lettersGuessed, wordToGuess)
+            if ''.join(display) == wordToGuess:
+                print('You win! I hope it feels good!')
+                gameOver = True
+            elif guessedLetter == True:
+                print('Well, hope to see you again!')
+                gameOver = True
+            elif guessedLetter in wordToGuess:
+                pass  # Don't kill somebody doing a good
+            elif life == 0:
+                print('Haha, if this were hang man, your dude would be hung! GAME OVER!')
+                gameOver = True
+            else:  # If you don't guess a letter correctly
+                life -= 1
+            print('≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈')
+            # Loop
+
     elif difficulty == 'hard':
         # Grab from the text file at any random line, as well as checking the length of that word
         # This will only select words that are 8+ characters long
-        wordToGuess = getWord(difficulty)
-        print('Alright fresh meat!')
+        print('Alright fresh meat!')  # Pretend this is a demon.
         while not gameOver:
-            pass
+            print('These are your guessed letters: ', ' '.join(lettersGuessed))
+            print('This is your life total: ', life)
+
+            # Build your board
+            display = build_display(lettersGuessed, wordToGuess)
+            print(' '.join(display))
+
+            # Take the players guess and check it
+            guessedLetter = checker(lettersGuessed)
+            lettersGuessed += guessedLetter
+
+            # Check if they win/lose
+            display = build_display(lettersGuessed, wordToGuess)
+            if ''.join(display) == wordToGuess:
+                print('You win! I hope it feels good!')
+                gameOver = True
+            elif guessedLetter == True:
+                print('Well, hope to see you again!')
+                gameOver = True
+            elif guessedLetter in wordToGuess:
+                pass  # Don't kill somebody doing a good
+            elif life == 0:
+                print('Haha, if this were hang man, your dude would be hung! GAME OVER!')
+                gameOver = True
+            else:  # If you don't guess a letter correctly
+                life -= 1
+            print('≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈')
+            # Loop
+    elif difficulty == 'evil':
+        # Soon the game will begin...
+        # Pretend this is a hollowed butler.
+        print('Welcome.\n This version of the game is not meant for those looking for victory.\n The time will come when you give up, for we will be working against you.')
+        pass
     else:
         print('I\'m not sure how you got here. This shouldn\'t be possible! Game Over!')
         gameOver = True
 
-    startOverOrQuit = input('You want to play again? (yes/no)').lower()
-    if startOverOrQuit == 'yes':
-        game()
-    elif startOverOrQuit == 'no':
-        print('Well, thanks for playing. This was fun!')
-
+    checkGame(input('You want to play again? (yes/no)').lower())
 
 # -------------------- HELPER FUNCTIONS ------------------------
+
+
+def build_display(lettersGuessed, wordToGuess):
+    display = []
+    for letter in wordToGuess:
+        if letter not in lettersGuessed:
+            display += '_'
+        else:
+            display += letter
+    return display
+
+
+def checkGame(more):
+    if more == 'yes':
+        game()
+    elif more == 'no':
+        print('Well, thanks for playing!')
+    else:
+        more = input(
+            'Seems like you typed something strange. Type yes or no:   ')
+        return checkGame(more)
+
+
 def setDifficulty():
     """ This will loop until they give a valid difficulty """
     set = False
     difficulty = input(
-        'How hard do you want this to be? (easy, medium, hard)').lower()
+        'How hard do you want this to be? (easy, medium, hard)   ').lower()
     while not set:
         if difficulty == 'easy':
             set = True
@@ -83,22 +164,41 @@ def setDifficulty():
             set = True
         else:
             difficulty = input(
-                'Maybe you need help. Type on of these: easy, medium, hard:  ')
+                'Maybe you need help. Type on of these: easy, medium, hard:   ')
     return difficulty
 
 
-def checker():
+def checker(lettersGuessed):
     """ This will check if the word is the word you're trying to word, yuhknow?  """
-    guessedLetter = input('What is your guess?  ')
-    if input ==
+    guessedLetter = input('What is your guess?  \n')
+    if guessedLetter == 'quit':
+        return True
+    elif guessedLetter == 'help':
+        print('Mystery Rules:\n-Type one letter per round\n-Use your brain to think about the next letter\n-Repeat.')
+        return checker(lettersGuessed)
+    elif len(guessedLetter) > 1:
+        print('Hey bud, that guess needs to be one letter')
+        return checker(lettersGuessed)
+    elif guessedLetter in lettersGuessed:
+        print('You have already guessed that! Give it another go!')
+        return checker(lettersGuessed)
+    elif guessedLetter in numbers:
+        print('You think numbers are words?')
+        return checker(lettersGuessed)
+    elif guessedLetter in letters:
+        return guessedLetter
+    else:
+        print('I am not sure what you\'re trying here but it ain\'t gonna work.')
+        return checker(lettersGuessed)
 
 
 def getWord(difficulty):
     with open('words.txt') as words:
         words = words.read().splitlines()
-        word = random.choice(words)
+        word = random.choice(words).lower()
+    print(word)
     if difficulty == 'easy':
-        if len(word) <= 6:
+        if 4 <= len(word) <= 6:
             return word
         else:
             return getWord(difficulty)
