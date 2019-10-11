@@ -3,6 +3,11 @@ numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 letters = 'abcdefghijklmnopqrstuvwxyz'
 # I wrote this without even realizing there are python conventions (snake_case)
 # Will adjust in future projects
+# I am really curious from Momentum: 
+#    My curiosities: 
+#    - How could I make this more efficient? 
+#    - Are there pitfalls I didn't account for?
+
 
 
 def game():
@@ -154,6 +159,7 @@ def talk(difficulty):
         if stepRightUp == 1:
             print('You\'ll get there.')
         elif stepRightUp == 2:
+            # This is my favorite cause I came up with it and it's mine :P 
             print('You\'re like a lamp post, bright enough to light up the road but not much else.')
         elif stepRightUp == 3:
             print('Wow, are you going to get it? I can\'t tell.')
